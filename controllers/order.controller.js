@@ -3,10 +3,10 @@ const {orderModel}=require('../models/order.model')
 const {productModel}=require('../models/product.model');
 const {userModel} = require('../models/user.model');
 exports.getUserProducts=async (req,res)=>{
-    const id=req.body.userId;
+    const id=req.params.user;
     console.log("Hello")
     try{
-        const order=await orderModel.findOne({userId:{$eq:id}});
+        const order=await orderModel.findOne({username:{$eq:id}});
         if(!order) res.json({"message":"Order not found"})
         else res.status(200).json(order)
     }
