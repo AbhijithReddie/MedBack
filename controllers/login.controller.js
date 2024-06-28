@@ -4,7 +4,7 @@ const jwt=require('jsonwebtoken');
 const { userModel } = require('../models/user.model');
 // const { userModel } = require('../models/user.model');
 exports.checkUser =async (req,res)=>{
-    const {email,password}=req.body;
+    const {email,password,username}=req.body;
     if(!email || !password)
          res.json({message:"Email or Password cannot be empty"})
     else{
@@ -13,7 +13,7 @@ exports.checkUser =async (req,res)=>{
                 if(email!=undefined){
                     login=await loginModel.findOne({email:{$eq:email}})
                 }
-                else if(user!=undefined){
+                else if(username!=undefined){
                     login=await loginModel.findOne({username:username})
                 }
                 const originalPass=await bcrypt.compare(password,login.password)
