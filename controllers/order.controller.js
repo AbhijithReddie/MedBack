@@ -16,7 +16,7 @@ exports.getUserProducts=async (req,res)=>{
 }
 
 exports.saveProduct=async (req,res)=>{
-    const userId = req.body.userId;
+    const userId = req.params.userId;
     try {
         const cartItem=await cartModel.findOne({userId:{$eq:userId} });
         if(!cartItem) return res.json({message:"Cart Items Not Found"})
@@ -27,13 +27,14 @@ exports.saveProduct=async (req,res)=>{
             })
             let total=0;
             cartItem.items.forEach((element) => {
-                const {productName,quantity,price}=element;
+                const {productName,quantity,price,modeOfPayment}=element;
                 total+=price;
                 order.items.push({
                     productName:productName,
                     quantity:quantity,
                     totalPrice:(Number(quantity)*(Number(price))),
                     price:price,
+                    modeOfPayment:modeOfPayment
                 })
             });
             order.totalPrice=total;
@@ -66,7 +67,7 @@ exports.saveProduct=async (req,res)=>{
 
 exports.placeOrder=async (req,res)=>{
     try{
-        const {userId,productId}=req.body;
+        const {userId,productId,modeOfPayment}=req.body;
         console.log(userId)
         const sprod=await productModel.findOne({productId:{$eq:productId}});
         const {productName,price,quantity}=sprod;
@@ -79,6 +80,7 @@ exports.placeOrder=async (req,res)=>{
             productName:productName,
             quantity:1,
             price:price,
+            modeOfPayment:modeOfPayment
         })
         order.totalPrice=(Number(quantity)*Number(price)),
         await order.save()
