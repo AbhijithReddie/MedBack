@@ -4,6 +4,7 @@ const controller=require('../controllers/cart.controller')
 const { authenticateUser } = require('../middlewares/user.middleware')
 
 cartroutes.get('/',authenticateUser,controller.showCart)
+cartroutes.post('/addtocart/:id',authenticateUser,controller.addToCart)
 cartroutes.post('/delete/:id',authenticateUser,controller.deleteCartItem)
 cartroutes.post('/increment/:productId',authenticateUser,controller.incrementItem)
 cartroutes.post('/decrement/:productId',authenticateUser,controller.decrementItem)
