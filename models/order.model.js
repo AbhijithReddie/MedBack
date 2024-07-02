@@ -37,6 +37,10 @@ const orderSchema = mongoose.Schema({
     },
     modeOfPayment:{
         type:String,
+    },
+    address:{
+        type:String,
+        required:true
     }
 });
 const orderModel = mongoose.model("order", orderSchema);

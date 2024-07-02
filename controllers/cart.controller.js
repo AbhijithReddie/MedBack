@@ -50,6 +50,7 @@ exports.addToCart = async (req, res) => {
             productName: product.productName,
             quantity: req.body.quantity,
             price: req.body.quantity * pricePerItem,
+            pricePerUnit:pricePerItem,
             prescription: product.prescriptionRequired,
           }],
         });

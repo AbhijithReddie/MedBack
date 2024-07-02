@@ -17,6 +17,8 @@ exports.getUserProducts=async (req,res)=>{
 
 exports.saveProduct=async (req,res)=>{
     const userId = req.params.userId;
+    const modeOfPayment=req.body.modeOfPayment;
+    const address=req.body.address;
     try {
         const cartItem=await cartModel.findOne({userId:{$eq:userId} });
         if(!cartItem) return res.json({message:"Cart Items Not Found"})
@@ -24,17 +26,18 @@ exports.saveProduct=async (req,res)=>{
             const order=new orderModel({
                 userId:userId,
                 status:"Order Placed",
+                modeOfPayment:modeOfPayment,
+                address:address
             })
             let total=0;
             cartItem.items.forEach((element) => {
-                const {productName,quantity,price,modeOfPayment}=element;
+                const {productName,quantity,price,modeOfPayment,address}=element;
                 total+=price;
                 order.items.push({
                     productName:productName,
                     quantity:quantity,
                     totalPrice:(Number(quantity)*(Number(price))),
                     price:price,
-                    modeOfPayment:modeOfPayment
                 })
             });
             order.totalPrice=total;
