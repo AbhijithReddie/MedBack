@@ -31,8 +31,7 @@ const productSchema = mongoose.Schema({
     },
     checkAvailable:{
         type:String,
-        default:"Availble",
-        required:true
+        default:"Availble"
     }
 });
 const productModel = mongoose.model("product", productSchema);

@@ -28,13 +28,16 @@ exports.getProductData=async (req,res)=>{
 
 exports.productEditSave=async (req,res)=>{
     const id=req.params.id;
+
+    const {imageUrl,productName,price,description,quantity}=req.body.updatedProduct;
+    console.log(typeof req.body);
     try{
         const prod=await productModel.findOneAndUpdate({productId:{$eq:id}},{
-            imageUrl:req.body.imageUrl,
-            productName:req.body.productName,
-            price:req.body.price,
-            description:req.body.description,
-            quantity:req.body.quantity
+            imageUrl:imageUrl,
+            productName:productName,
+            price:price,
+            description:description,
+            quantity:quantity
         });
         if(!prod) res.json({"message":"Product not found"})
         else res.status(200).json(prod)
@@ -45,6 +48,7 @@ exports.productEditSave=async (req,res)=>{
 
 exports.productSave=async (req,res)=>{
     try{
+        // console.log(req.body);
         const id=req.body.productId
         const prod=await productModel.create({
             productId:req.body.productId,
@@ -52,10 +56,12 @@ exports.productSave=async (req,res)=>{
             productName:req.body.productName,
             price:req.body.price,
             description:req.body.description,
-            quantity:prod.quantity+req.body.quantity,
+            quantity:req.body.quantity,
             prescriptionRequired:req.body.prescriptionRequired
         });
-        res.status(200).json(prod)
+        await productModel.save();
+        console.log(prod);
+        res.status(200).json("Hello ",prod)
     }catch(err){
         res.json({"message":"Error in adding the product!!"})
     }

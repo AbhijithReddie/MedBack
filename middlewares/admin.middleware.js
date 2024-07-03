@@ -11,11 +11,19 @@ exports.authenticateAdmin=async (req,res,next)=>{
             res.status(401).json({access:false,mesage:"Unauthorized admin"})
         }
         jwt.verify(token,process.env.secretKey,async (err,data)=>{
+
+            if(err) return res.json({message:"Not Authorised"})
             console.log("data from msg is : ",data)
-            const admin=await userModel.findOne({_id:{$eq:data}})
-            console.log(admin);
-            if(admin.role==="admin")
+            // const admin=await userModel.findOne({email:data.email});
+            // console.log(admin);
+            console.log(typeof data);
+            const obj=JSON.parse(data);
+            console.log(typeof obj);
+            const {role}=obj
+            console.log(role);
+            if(role==='admin')
                 next()
+            else console.log('Error admin');
         })
     }
     catch(err){

@@ -33,9 +33,9 @@ exports.addToCart = async (req, res) => {
           cartFind.items.push({
             cartItemID: productId,
             productName: product.productName,
-            quantity: req.body.quantity,
+            quantity: 1,
             pricePerUnit:pricePerItem,
-            price: req.body.quantity * pricePerItem,
+            price: pricePerItem,
             prescription: product.prescriptionRequired,
           });
         }
@@ -48,8 +48,8 @@ exports.addToCart = async (req, res) => {
           items: [{
             cartItemID: productId,
             productName: product.productName,
-            quantity: req.body.quantity,
-            price: req.body.quantity * pricePerItem,
+            quantity: 1,
+            price: pricePerItem,
             pricePerUnit:pricePerItem,
             prescription: product.prescriptionRequired,
           }],
