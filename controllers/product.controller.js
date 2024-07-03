@@ -10,6 +10,7 @@ exports.getProduct=async (req,res)=>{
 exports.getHomeProduct=async (req,res)=>{
     try{
         const prod=await productModel.find({})
+        console.log(typeof prod);
         res.status(200).json(prod)
     }catch(err){res.json({"message":"Error in loading the data!!"})}
 }

@@ -6,9 +6,12 @@ exports.getUserProducts=async (req,res)=>{
     const id=req.params.user;
     console.log("Hello")
     try{
-        const order=await orderModel.findOne({username:{$eq:id}});
+        const order=await orderModel.findOne({userId:{$eq:id}});
         if(!order) res.json({"message":"Order not found"})
-        else res.status(200).json(order)
+        else{
+            console.log("Inside try")
+            res.status(200).json({order:order})
+        }
     }
     catch(err){
         res.json({"message":"Error in loading the order details!!"})
@@ -59,7 +62,7 @@ exports.saveProduct=async (req,res)=>{
             ).exec();      
             
             await cartModel.findOneAndDelete({userId:userId});   
-            return res.status(200).json({message:"Added to Order.."});      
+            return res.status(200).json({message:"Added to Order..",status:true});      
         }
     }
     catch (error) {
@@ -70,20 +73,21 @@ exports.saveProduct=async (req,res)=>{
 
 exports.placeOrder=async (req,res)=>{
     try{
-        const {userId,productId,modeOfPayment}=req.body;
+        const {userId,productId,modeOfPayment,address}=req.body;
         console.log(userId)
         const sprod=await productModel.findOne({productId:{$eq:productId}});
         const {productName,price,quantity}=sprod;
         console.log(sprod.productName)
         const order=await orderModel.create({
             userId:userId,
-            status:"Placed Order"
+            status:"Placed Order",
+            address:address,
+            modeOfPayment:modeOfPayment
         })
         order.items.push({
             productName:productName,
             quantity:1,
             price:price,
-            modeOfPayment:modeOfPayment
         })
         order.totalPrice=(Number(quantity)*Number(price)),
         await order.save()
