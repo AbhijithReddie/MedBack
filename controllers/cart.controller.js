@@ -28,7 +28,7 @@ exports.addToCart = async (req, res) => {
       if (cartFind) {
         const idx = cartFind.items.findIndex((c) => c.cartItemID === productId);
         if (idx !== -1) {
-          cartFind.items[idx].quantity += req.body.quantity;
+          cartFind.items[idx].quantity += 1;
         } else {
           cartFind.items.push({
             cartItemID: productId,
@@ -82,15 +82,19 @@ exports.showCart = async (req, res) => {
 exports.deleteCartItem = async (req, res) => {
     const userId = req.body.userId; 
     const cartItemId = req.params.id; 
+    console.log('hello')
     try {
+      console.log('hello try')
         const cart = await cartModel.findOne({userId:{$eq:userId}});
         if (!cart) {
             return res.status(404).json({ message: "Cart item not found" });
         }
         else{
+          console.log('hello else')
             const idx=cart.items.findIndex(citem=>citem.cartItemID==cartItemId)
             if(idx==-1) res.status(404).json({message:"Item not fount in cart"})
             else{
+              console.log('hello else 2')
                 cart.items.splice(idx,1);
                 await cart.save()
                 res.status(200).json({ message: "Cart item deleted successfully" });
