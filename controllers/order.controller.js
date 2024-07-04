@@ -6,10 +6,10 @@ exports.getUserProducts=async (req,res)=>{
     const id=req.params.user;
     console.log("Hello")
     try{
-        const order=await orderModel.findOne({userId:{$eq:id}});
+        const order=await orderModel.find({userId:{$eq:id}});
         if(!order) res.json({"message":"Order not found"})
         else{
-            console.log("Inside try")
+            console.log("Inside try ",order);
             res.status(200).json({order:order})
         }
     }
@@ -34,9 +34,10 @@ exports.saveProduct=async (req,res)=>{
             })
             let total=0;
             cartItem.items.forEach((element) => {
-                const {productName,quantity,price,modeOfPayment,address}=element;
+                const {productName,quantity,price,imageUrl,modeOfPayment,address}=element;
                 total+=price;
                 order.items.push({
+                    imageUrl:imageUrl,
                     productName:productName,
                     quantity:quantity,
                     totalPrice:(Number(quantity)*(Number(price))),
@@ -72,29 +73,38 @@ exports.saveProduct=async (req,res)=>{
 }
 
 exports.placeOrder=async (req,res)=>{
+    console.log("From Place Order called: ",req.body);
     try{
-        const {userId,productId,modeOfPayment,address}=req.body;
-        console.log(userId)
+        const userId=req.body.userId;
+        const productId=req.body.productId;
+        const modeOfPayment=req.body.modeOfPayment;
+        const address=req.body.address;
         const sprod=await productModel.findOne({productId:{$eq:productId}});
-        const {productName,price,quantity}=sprod;
+        const {productName,price,imageUrl}=sprod;
+        if (!sprod) {
+            return res.status(404).json({ message: "Product not found" });
+        }
         console.log(sprod.productName)
         const order=await orderModel.create({
             userId:userId,
             status:"Placed Order",
             address:address,
-            modeOfPayment:modeOfPayment
+            modeOfPayment:modeOfPayment,
+            items:[{
+                productName:productName,
+                imageUrl:imageUrl,
+                quantity:1,
+                price:Number(price),
+            }],
+            totalPrice:Number(price)
         })
-        order.items.push({
-            productName:productName,
-            quantity:1,
-            price:price,
-        })
-        order.totalPrice=(Number(quantity)*Number(price)),
-        await order.save()
+        await order.save();
         await userModel.findOneAndUpdate(
+            { _id: userId },
             { $push: { ordersList: order } }
-        );
-        res.status(200).json(order);
+        ).exec();
+        console.log("Ordered Successfully ",order);
+        return res.status(200).json({order:order,status:true});
     }
-    catch(err){res.status(404).json({message:"Error in adding order!!!"})}
+    catch(err){return res.status(404).json({message:"Error in adding order!!!"})}
 }

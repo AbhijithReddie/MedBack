@@ -9,8 +9,8 @@ const adminRoute=require('./routes/admin.route')
 const orderRoute=require('./routes/orders.route')
 const homeRoute=require('./routes/home.route')
 const checkRoute=require('./routes/checkUser.route')
-const cors=require('cors')
-app.use(express.json())
+const cors=require('cors');
+app.use(express.json());
 app.use(cors());
 const mongoose=require('mongoose')
 

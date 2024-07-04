@@ -23,6 +23,7 @@ exports.addToCart = async (req, res) => {
         return res.json({message:"Product is Out Of stock",status:false});
       }
       const pricePerItem = product.price;
+      const img=product.imageUrl;
       const cartFind = await cartModel.findOne({ userId });
   
       if (cartFind) {
@@ -31,6 +32,7 @@ exports.addToCart = async (req, res) => {
           cartFind.items[idx].quantity += 1;
         } else {
           cartFind.items.push({
+            imageUrl:img,
             cartItemID: productId,
             productName: product.productName,
             quantity: 1,
@@ -47,6 +49,7 @@ exports.addToCart = async (req, res) => {
           userId,
           items: [{
             cartItemID: productId,
+            imageUrl:img,
             productName: product.productName,
             quantity: 1,
             price: pricePerItem,

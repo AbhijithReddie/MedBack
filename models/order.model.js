@@ -11,6 +11,9 @@ const orderSchema = mongoose.Schema({
     },
     items:{
         type:[{
+            imageUrl:{
+                type:String,
+            },
             productName:{
                 type:String,
                 required:true

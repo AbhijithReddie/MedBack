@@ -12,7 +12,10 @@ const cartSchema = mongoose.Schema({
             cartItemID:{
                 type:String,
                 required:true
-            },        
+            }, 
+            imageUrl:{
+                type:String
+            },    
             productName:{
                 type:String,
                 required:true
