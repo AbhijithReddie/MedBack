@@ -25,7 +25,10 @@ const orderSchema = mongoose.Schema({
             price:{
                 type:Number,
                 required:true
-            }
+            },
+            itemPrice:{
+                type:Number,
+            },
         }],
         default:[]
     },

@@ -71,6 +71,7 @@ exports.productDelete=async (req,res)=>{
     const id=req.params.id;
     try{
         const prod=await productModel.findOneAndDelete({productId:{$eq:id}});
+        console.log(prod);
         if(!prod) res.json({"message":"Product not found"})
         else res.status(200).json(prod)
     }catch(err){

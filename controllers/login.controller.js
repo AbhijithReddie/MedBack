@@ -5,16 +5,17 @@ const { userModel } = require('../models/user.model');
 // const { userModel } = require('../models/user.model');
 exports.checkUser =async (req,res)=>{
     const {email,password,username}=req.body;
+    console.log(email,password,typeof username);
+    // console.log(a===b);
     if(!email || !password)
          res.json({message:"Email or Password cannot be empty"})
     else{
         try{
-                let login=null;
-                if(email!=undefined){
-                    login=await loginModel.findOne({email:{$eq:email}})
+                if(!email){
+                   var login=await loginModel.findOne({username:{$eq:username}})
                 }
-                else if(username!=undefined){
-                    login=await loginModel.findOne({username:username})
+                else if(username===''){
+                    login=await loginModel.findOne({email:{$eq:email}})
                 }
                 const originalPass=await bcrypt.compare(password,login.password)
                 if(!originalPass) res.json({message:"Login Unsuccessful"})

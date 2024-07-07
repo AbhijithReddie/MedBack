@@ -30,7 +30,7 @@ const cartSchema = mongoose.Schema({
             },
             prescription:{
                 type:Boolean,
-                // required:true
+                required:true
             },
             pricePerUnit:{
                 type:Number,

@@ -40,7 +40,7 @@ exports.saveProduct=async (req,res)=>{
                     imageUrl:imageUrl,
                     productName:productName,
                     quantity:quantity,
-                    totalPrice:(Number(quantity)*(Number(price))),
+                    itemPrice:(Number(quantity)*(Number(price))),
                     price:price,
                 })
             });
@@ -95,6 +95,7 @@ exports.placeOrder=async (req,res)=>{
                 imageUrl:imageUrl,
                 quantity:1,
                 price:Number(price),
+                itemPrice:Number(price),
             }],
             totalPrice:Number(price)
         })

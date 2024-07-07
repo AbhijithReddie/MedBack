@@ -25,7 +25,7 @@ exports.addToCart = async (req, res) => {
       const pricePerItem = product.price;
       const img=product.imageUrl;
       const cartFind = await cartModel.findOne({ userId });
-  
+      
       if (cartFind) {
         const idx = cartFind.items.findIndex((c) => c.cartItemID === productId);
         if (idx !== -1) {
@@ -57,6 +57,8 @@ exports.addToCart = async (req, res) => {
             prescription: product.prescriptionRequired,
           }],
         });
+        await cartItem.save();
+        console.log(cartItem);
         console.log("Created new cart for user:", userId);
         return res.status(201).json({ message: "Cart created" });
       }
