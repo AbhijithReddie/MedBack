@@ -9,6 +9,8 @@ const adminRoute=require('./routes/admin.route')
 const orderRoute=require('./routes/orders.route')
 const homeRoute=require('./routes/home.route')
 const checkRoute=require('./routes/checkUser.route')
+const profileRoute=require('./routes/profile.route')
+
 const cors=require('cors');
 app.use(express.json());
 app.use(cors());
@@ -24,6 +26,7 @@ app.use('/admin',adminRoute)
 app.use('/cart',cartRoute)
 app.use('/orders',orderRoute)
 app.use('/checkUser',checkRoute)
+app.use('/profile',profileRoute)
 
 app.listen(port,()=>{
     console.log(`Server listening at port ${port}..`)
