@@ -79,7 +79,7 @@ exports.placeOrder=async (req,res)=>{
         const productId=req.body.productId;
         const modeOfPayment=req.body.modeOfPayment;
         const address=req.body.address;
-        const sprod=await productModel.findOne({productId:{$eq:productId}});
+        const sprod=await productModel.findById({productId});
         const {productName,price,imageUrl}=sprod;
         if (!sprod) {
             return res.status(404).json({ message: "Product not found" });

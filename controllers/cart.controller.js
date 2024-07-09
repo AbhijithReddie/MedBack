@@ -13,6 +13,7 @@ exports.addToCart = async (req, res) => {
     console.log("User ID:", userId);
   
     try {
+      console.log("Hello....")  
       const product = await productModel.findById(productId);
       if (!product) {
         console.error("Product not found:", productId);
@@ -25,12 +26,14 @@ exports.addToCart = async (req, res) => {
       const pricePerItem = product.price;
       const img=product.imageUrl;
       const cartFind = await cartModel.findOne({ userId });
-      
+      console.log("Cart:::")
+      console.log(cartFind);
       if (cartFind) {
         const idx = cartFind.items.findIndex((c) => c.cartItemID === productId);
         if (idx !== -1) {
           cartFind.items[idx].quantity += 1;
         } else {
+          console.log("Hello existing cart")
           cartFind.items.push({
             imageUrl:img,
             cartItemID: productId,
@@ -43,8 +46,10 @@ exports.addToCart = async (req, res) => {
         }
         await cartFind.save();
         console.log("Updated cart for user:", userId);
-        return res.status(201).json({ message: "Updated cart" });
-      } else {
+        return res.status(201).json({ message: "Updated cart" ,cart:cartFind});
+      } 
+      else {  
+        console.log("Hello new cart")
         const cartItem = await cartModel.create({
           userId,
           items: [{
@@ -60,16 +65,13 @@ exports.addToCart = async (req, res) => {
         await cartItem.save();
         console.log(cartItem);
         console.log("Created new cart for user:", userId);
-        return res.status(201).json({ message: "Cart created" });
+        return res.status(201).json({ message: "Cart created",cart:cartItem});
       }
     } catch (error) {
       console.error("Error occurred while adding to cart:", error);
       res.status(500).json({ message: "An error occurred while adding to cart" });
     }
   };
-  
-
-
 
 exports.showCart = async (req, res) => {
     const userId = req.body.userId;
