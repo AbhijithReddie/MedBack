@@ -38,7 +38,7 @@ exports.addProfileData=async (req,res)=>{
                 otherCondition:otherCondition
             })
             for(let i=0;i<specificCondition.length;i++){
-                pmoel.specificCondition.push(specificCondition[i]);
+                pmodel.specificCondition.push(specificCondition[i]);
             }
             await pmodel.save();
             return res.status(200).json({pmodel});
