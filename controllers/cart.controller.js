@@ -32,6 +32,7 @@ exports.addToCart = async (req, res) => {
         const idx = cartFind.items.findIndex((c) => c.cartItemID === productId);
         if (idx !== -1) {
           cartFind.items[idx].quantity += 1;
+          cartFind.items[idx].price=(cartFind.items[idx].quantity*cartFind.items[idx].pricePerUnit);
         } else {
           console.log("Hello existing cart")
           cartFind.items.push({

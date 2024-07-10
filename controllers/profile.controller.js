@@ -23,6 +23,7 @@ exports.addProfileData=async (req,res)=>{
     console.log(pdata);
     try{
         const {fullName,email,phoneNumber,gender,address,medicalCondition,specificCondition,otherCondition}=pdata;
+        console.log("Medical Conition is ",medicalCondition);
         const prof=await profileModel.findOne({userId:id});
         if(!prof){
             const pmodel=await profileModel.create({
