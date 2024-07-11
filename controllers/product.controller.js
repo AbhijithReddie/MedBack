@@ -10,19 +10,23 @@ exports.getProduct=async (req,res)=>{
 exports.getHomeProduct=async (req,res)=>{
     try{
         const prod=await productModel.find({})
-        console.log(typeof prod);
+        console.log("hello from all products");
         res.status(200).json(prod)
-    }catch(err){res.json({"message":"Error in loading the data!!"})}
+    }catch(err){
+        res.json({"message":"Error in loading the data!!"})
+    }
 }
 
 exports.getProductData=async (req,res)=>{
     const id=req.params.id;
     try{
-        const prod=await productModel.findOne({productId:{$eq:id}});
-        if(!prod) res.json({"message":"Product not found"})
-        else res.status(200).json(prod)
+        const prod=await productModel.findById(id);
+        console.log(prod,typeof prod);
+        if(!prod) return res.json({"message":"Product not found"})
+        return res.status(200).json(prod)
     }catch(err){
-        res.json({"message":"Error in loading the product data!!"})
+        console.log(err);
+        return res.json({"message":"Error in loading the product data!!"})
     }
 }
 
@@ -81,7 +85,7 @@ exports.productDelete=async (req,res)=>{
 
 exports.getProdData=async (req,res)=>{
     const id=req.params.id;
-    console.log(id)
+    console.log("Hello",id)
     try{
         const prod=await productModel.findById(id);
         if(!prod) res.json({"message":"Product not found"})
