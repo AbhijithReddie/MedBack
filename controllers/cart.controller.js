@@ -132,7 +132,7 @@ exports.incrementItem=async (req,res)=>{
         
         cart.items[prod].quantity+=1;
         if(cart.items[prod].quantity>prodDet.quantity){
-            return res.json({message:"Cannot add product,Out Of Stock"})
+            return res.json({message:"Cannot add product,Out Of Stock" ,status:false})
         }
         cart.items[prod].pricePerUnit=perProdPrice;
         cart.items[prod].price=(cart.items[prod].quantity)*perProdPrice;
