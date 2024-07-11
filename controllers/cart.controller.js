@@ -7,11 +7,12 @@ const {userModel}=require('../models/user.model')
 exports.addToCart = async (req, res) => {
     const productId = req.params.id;
     const userId = req.body.userId;
-  
+    let quant=Number(req.body.quantity);
+    if(quant==0)quant=quant+1;
     console.log("Received request to add to cart");
     console.log("Product ID:", productId);
     console.log("User ID:", userId);
-  
+
     try {
       console.log("Hello....")  
       const product = await productModel.findById(productId);
@@ -39,7 +40,7 @@ exports.addToCart = async (req, res) => {
             imageUrl:img,
             cartItemID: productId,
             productName: product.productName,
-            quantity: 1,
+            quantity: quant,
             pricePerUnit:pricePerItem,
             price: pricePerItem,
             prescription: product.prescriptionRequired,
@@ -57,7 +58,7 @@ exports.addToCart = async (req, res) => {
             cartItemID: productId,
             imageUrl:img,
             productName: product.productName,
-            quantity: 1,
+            quantity: quant,
             price: pricePerItem,
             pricePerUnit:pricePerItem,
             prescription: product.prescriptionRequired,

@@ -114,3 +114,17 @@ exports.placeOrder=async (req,res)=>{
         console.log(err);
         return res.status(404).json({message:"Error in adding order!!!"})}
 }
+
+
+exports.getOrderData=async (req,res)=>{
+    try{
+        const users=await userModel.find({});
+        console.log(typeof users);
+        const fusers=users.filter(user=>user.ordersList.length!==0);
+        return res.json(fusers);
+    }
+    catch(e){
+        console.log(e);
+        return res.json({message:'error in fetching orders'})
+    }
+}
