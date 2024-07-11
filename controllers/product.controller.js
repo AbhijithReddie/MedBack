@@ -33,7 +33,7 @@ exports.getProductData=async (req,res)=>{
 exports.productEditSave=async (req,res)=>{
     const id=req.params.id;
 
-    const {imageUrl,productName,price,description,quantity}=req.body.updatedProduct;
+    const {imageUrl,productName,price,description,quantity,category}=req.body.updatedProduct;
     console.log(typeof req.body);
     try{
         const prod=await productModel.findOneAndUpdate({productId:{$eq:id}},{
@@ -41,7 +41,8 @@ exports.productEditSave=async (req,res)=>{
             productName:productName,
             price:price,
             description:description,
-            quantity:quantity
+            quantity:quantity,
+            category:category
         });
         if(!prod) res.json({"message":"Product not found"})
         else res.status(200).json(prod)
@@ -61,7 +62,8 @@ exports.productSave=async (req,res)=>{
             price:req.body.price,
             description:req.body.description,
             quantity:req.body.quantity,
-            prescriptionRequired:req.body.prescriptionRequired
+            prescriptionRequired:req.body.prescriptionRequired,
+            category:req.body.category
         });
         await productModel.save();
         console.log(prod);

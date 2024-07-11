@@ -32,6 +32,9 @@ const productSchema = mongoose.Schema({
     checkAvailable:{
         type:String,
         default:"Availble"
+    },
+    category:{
+        type:String
     }
 });
 const productModel = mongoose.model("product", productSchema);
