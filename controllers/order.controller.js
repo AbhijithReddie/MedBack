@@ -75,11 +75,14 @@ exports.saveProduct=async (req,res)=>{
 exports.placeOrder=async (req,res)=>{
     console.log("From Place Order called: ",req.body);
     try{
+        console.log("xxxxxxx");
+        
         const userId=req.body.userId;
         const productId=req.body.productId;
         const modeOfPayment=req.body.modeOfPayment;
         const address=req.body.address;
-        const sprod=await productModel.findById({productId});
+        const sprod=await productModel.findById(productId);
+        console.log(sprod);
         const {productName,price,imageUrl}=sprod;
         if (!sprod) {
             return res.status(404).json({ message: "Product not found" });
@@ -107,5 +110,7 @@ exports.placeOrder=async (req,res)=>{
         console.log("Ordered Successfully ",order);
         return res.status(200).json({order:order,status:true});
     }
-    catch(err){return res.status(404).json({message:"Error in adding order!!!"})}
+    catch(err){
+        console.log(err);
+        return res.status(404).json({message:"Error in adding order!!!"})}
 }
