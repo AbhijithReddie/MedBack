@@ -1,37 +1,39 @@
-const productModel = require('../models/product.model');
+const {productModel}=require('../models/product.model')
 
-exports.getProduct = async (req, res) => {
-    try {
-        const prod = await productModel.find({}, '-__v'); // Exclude the '__v' field if not needed
-        res.status(200).json(prod);
-    } catch (err) {
-        res.status(500).json({ message: "Error in loading the data!!" });
-    }
-};
+exports.getProduct=async (req,res)=>{
+    try{
+        const prod=await productModel.find({})
+        res.status(200).json(prod)
+    }catch(err){res.json({"message":"Error in loading the data!!"})}
+}
 
 exports.getHomeProduct=async (req,res)=>{
     try{
         const prod=await productModel.find({})
-        console.log(typeof prod);
+        console.log("hello from all products");
         res.status(200).json(prod)
-    }catch(err){res.json({"message":"Error in loading the data!!"})}
+    }catch(err){
+        res.json({"message":"Error in loading the data!!"})
+    }
 }
 
 exports.getProductData=async (req,res)=>{
     const id=req.params.id;
     try{
-        const prod=await productModel.findOne({productId:{$eq:id}});
-        if(!prod) res.json({"message":"Product not found"})
-        else res.status(200).json(prod)
+        const prod=await productModel.findById(id);
+        console.log(prod,typeof prod);
+        if(!prod) return res.json({"message":"Product not found"})
+        return res.status(200).json(prod)
     }catch(err){
-        res.json({"message":"Error in loading the product data!!"})
+        console.log(err);
+        return res.json({"message":"Error in loading the product data!!"})
     }
-};
+}
 
 exports.productEditSave=async (req,res)=>{
     const id=req.params.id;
 
-    const {imageUrl,productName,price,description,quantity}=req.body.updatedProduct;
+    const {imageUrl,productName,price,description,quantity,category}=req.body.updatedProduct;
     console.log(typeof req.body);
     try{
         const prod=await productModel.findOneAndUpdate({productId:{$eq:id}},{
@@ -39,14 +41,15 @@ exports.productEditSave=async (req,res)=>{
             productName:productName,
             price:price,
             description:description,
-            quantity:quantity
+            quantity:quantity,
+            category:category
         });
         if(!prod) res.json({"message":"Product not found"})
         else res.status(200).json(prod)
     }catch(err){
         res.json({"message":"Error in loading the product data!!"})
     }
-};
+}
 
 exports.productSave=async (req,res)=>{
     try{
@@ -59,7 +62,8 @@ exports.productSave=async (req,res)=>{
             price:req.body.price,
             description:req.body.description,
             quantity:req.body.quantity,
-            prescriptionRequired:req.body.prescriptionRequired
+            prescriptionRequired:req.body.prescriptionRequired,
+            category:req.body.category
         });
         await productModel.save();
         console.log(prod);
@@ -67,7 +71,7 @@ exports.productSave=async (req,res)=>{
     }catch(err){
         res.json({"message":"Error in adding the product!!"})
     }
-};
+}
 
 exports.productDelete=async (req,res)=>{
     const id=req.params.id;
@@ -83,7 +87,7 @@ exports.productDelete=async (req,res)=>{
 
 exports.getProdData=async (req,res)=>{
     const id=req.params.id;
-    console.log(id)
+    console.log("Hello",id)
     try{
         const prod=await productModel.findById(id);
         if(!prod) res.json({"message":"Product not found"})
@@ -91,4 +95,4 @@ exports.getProdData=async (req,res)=>{
     }catch(err){
         res.json({"message":"Error in loading the product data!!"})
     }
-};
+}

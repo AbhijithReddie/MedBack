@@ -2,6 +2,7 @@ const {loginModel}=require('../models/login.model')
 const bcrypt=require('bcrypt')
 const jwt=require('jsonwebtoken');
 const { userModel } = require('../models/user.model');
+const mailer=require('nodemailer');
 // const { userModel } = require('../models/user.model');
 exports.checkUser =async (req,res)=>{
     const {email,password,username}=req.body;
@@ -32,5 +33,38 @@ exports.checkUser =async (req,res)=>{
             console.log(err)
             res.json({message:"ERROR!!!"})
         }
+    }
+}
+
+exports.forgotPassword = async (req,res)=>{
+    try{
+        console.log(req.body.email);
+        const transporter= mailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 465,
+            secure: true,auth:{
+                user:'medworlddummy@gmail.com',
+                pass:'medworld@2024'
+            }
+        });
+        console.log('HELLLO');
+        const otp=Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
+        const mailOptions = {
+            from: 'medworlddummy@gmail.com',
+            to: req.body.email,
+            subject: 'Request Regarding Reset Password',
+            text: `OTP:${otp}`,
+            html: '<b>Hello,User this is your verification OTP, please do not share..!</b>',
+          };
+        //   console.log(mailOptions);
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error)
+              console.log('Mail failed!! :(',error);
+            else
+              console.log('Mail sent to ' + mailOptions.to)
+        });
+    }
+    catch(e){
+        return res.json({status:false,Error:'ERROR in Resetting password'})
     }
 }
