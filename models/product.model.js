@@ -30,13 +30,9 @@ const productSchema = mongoose.Schema({
         type: Boolean,
         required: true
     },
-    checkAvailable: {
-        type: String,
-        default: "Available"
-    },
-    categories: {
-        type: [String],
-        required: true
+    checkAvailable:{
+        type:String,
+        default:"Availble"
     }
 });
 

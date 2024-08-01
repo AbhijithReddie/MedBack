@@ -47,7 +47,13 @@ const orderSchema = mongoose.Schema({
     address:{
         type:String,
         required:true
-    }
+    },
+    placedDate:{
+        type:Date
+    },
+    expectedDate:{
+        type:String
+    },
 });
 const orderModel = mongoose.model("order", orderSchema);
 module.exports = {orderModel,orderSchema};

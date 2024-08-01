@@ -45,6 +45,8 @@ exports.saveProduct=async (req,res)=>{
                 })
             });
             order.totalPrice=total;
+            order.placedDate=(new Date()).toLocaleString()
+            order.expectedDate="Expected Delivery in 4 hours";
             await order.save()
             cartItem.items.forEach((element) => {
                 const {productName,quantity}=element;
@@ -102,6 +104,8 @@ exports.placeOrder=async (req,res)=>{
             }],
             totalPrice:Number(price)
         })
+        order.placedDate=(new Date()).toLocaleString();
+        order.expectedDate="Expected Delivery in 4 hours";
         await order.save();
         await userModel.findOneAndUpdate(
             { _id: userId },
