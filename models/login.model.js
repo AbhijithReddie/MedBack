@@ -12,6 +12,10 @@ const loginSchema = mongoose.Schema({
     username:{
         type:String,
         required:true
+    },
+    otp:{
+        type:String,
+        default:'',
     }
 });
 const loginModel = mongoose.model("login", loginSchema);
