@@ -10,6 +10,9 @@ const orderRoute=require('./routes/orders.route')
 const homeRoute=require('./routes/home.route')
 const checkRoute=require('./routes/checkUser.route')
 const profileRoute=require('./routes/profile.route')
+const feedbackRoutes = require('./routes/feedback.route');
+
+
 
 const cors=require('cors');
 app.use(express.json());
@@ -27,6 +30,7 @@ app.use('/cart',cartRoute)
 app.use('/orders',orderRoute)
 app.use('/checkUser',checkRoute)
 app.use('/profile',profileRoute)
+app.use('/feedback', feedbackRoutes);
 
 app.listen(port,()=>{
     console.log(`Server listening at port ${port}..`)
