@@ -1,22 +1,27 @@
 const mongoose = require("mongoose");
+
 const loginSchema = mongoose.Schema({
-   
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
     },
-   password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
-    username:{
-        type:String,
-        required:true
+    username: {
+        type: String,
+        required: true
     },
-    otp:{
-        type:String,
-        default:'',
+    otp: {
+        type: String,
+        default: '',
+    },
+    otpExpires: { // New field for OTP expiration time
+        type: Date,
+        default: null,
     }
 });
+
 const loginModel = mongoose.model("login", loginSchema);
-module.exports = {loginModel,loginSchema};
+module.exports = { loginModel, loginSchema };
