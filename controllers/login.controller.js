@@ -34,6 +34,7 @@ exports.checkUser = async (req, res) => {
 
 
 exports.forgotPassword = async (req, res) => {
+    console.log('hello');
     try {
         const { email } = req.body;
         const otp = Math.floor(Math.random() * (999999 - 100000 + 1)) + 100000;
@@ -49,7 +50,7 @@ exports.forgotPassword = async (req, res) => {
             secure: false,
             auth: {
                 user: 'medworlddummy@gmail.com',
-                pass: 'your-email-password' // Update with your password
+                pass: 'xdwu qpbl czrg hwrz' // Update with your password
             },
             tls: {
                 rejectUnauthorized: false
@@ -89,21 +90,24 @@ exports.forgotPassword = async (req, res) => {
 
 
 exports.verifyOtp = async (req, res) => {
+    console.log('hello');
     try {
         const { email, otp } = req.body;
-
-        const login = await loginModel.findOne({ email });
+        console.log(email);
+        const login = await loginModel.findOne({email:email});
         if (!login) {
             return res.status(404).json({ status: false, message: 'User not found' });
         }
 
         // Check if the OTP has expired
+        console.log('hello');
         if (login.otpExpires < Date.now()) {
-            return res.status(400).json({ status: false, message: 'OTP has expired' });
+            return res.json({ status: false, message: 'OTP has expired' });
         }
 
         // Compare the provided OTP with the hashed OTP stored in the database
         const isOtpValid = await bcrypt.compare(otp.toString(), login.otp);
+        console.log(isOtpValid);
         if (!isOtpValid) {
             return res.status(400).json({ status: false, message: 'Invalid OTP' });
         }
@@ -122,3 +126,24 @@ exports.verifyOtp = async (req, res) => {
     }
 };
 
+
+exports.resetPass = async (req,res)=>{
+    try{
+        const {email,newPass,confirmPass} = req.body;
+        console.log(newPass,confirmPass);
+        const salt = await bcrypt.genSalt(10);
+        const hashedPass = await bcrypt.hash(newPass, salt);
+        console.log('Hashed String is ',hashedPass);
+        const update= await loginModel.findOneAndUpdate({email:email},{password:hashedPass});
+        if(!update) return res.status(400).json({message:'Error in updating password'});
+        const updateUser=await userModel.findOneAndUpdate({email:email},{password:hashedPass});
+        if(!updateUser) return res.status(400).json({message:'Error in updating user data'});
+        // await update.save();
+        // await updateUser.save();
+        return res.status(200).json({status:true});
+    }
+    catch(e){
+        console.log(e);
+        return res.json({message:"OTP verification failed"});
+    }
+}
